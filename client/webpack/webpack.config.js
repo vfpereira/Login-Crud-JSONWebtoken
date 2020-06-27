@@ -4,7 +4,6 @@ const HtmlPlugin = require('html-webpack-plugin')
 const { join } = require('path')
 const webpack = require('webpack')
 const webpackDevServerWaitpage = require('webpack-dev-server-waitpage')
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 const clientConfig = {
   target: 'web',
@@ -22,7 +21,6 @@ const clientConfig = {
     new webpack.ProgressPlugin(),
     new HtmlPlugin(common.htmlPluginConfig.index),
     // new HtmlPlugin(common.htmlPluginConfig.admin)
-    new FaviconsWebpackPlugin(join(common.paths.root, 'img', 'favicon.png'))
   ],
 
   module: {

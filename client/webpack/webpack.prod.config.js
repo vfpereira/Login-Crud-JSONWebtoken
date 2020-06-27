@@ -30,7 +30,6 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name]-[hash].css'
     })
-    // new FaviconsWebpackPlugin(join(common.paths.root, 'img', 'favicon.png'))
   ],
 
   module: {
