@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack/webpack.config.js --mode development",np,
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack/webpack.config.js --mode development",
     "build:production": "cross-env NODE_ENV=production webpack --progress --config webpack/webpack.prod.config -p",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,7 +13,8 @@
   "dependencies": {
     "preact": "^10.4.4",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-icons": "^3.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

@@ -80,7 +80,7 @@ module.exports = {
     test: /\.(ico|jpg|jpeg|png|git|eot|otf|webp|svg|ttf|woff|woff2|txt)(\?.*)?$/,
     include: [
       paths.src,
-      join(paths.root, 'img')
+      [join(paths.root, 'images'), join(paths.root, 'fonts', 'poppins')]
     ],
     use: {
       loader: 'file-loader',
