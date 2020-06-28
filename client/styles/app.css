@@ -223,7 +223,7 @@ iframe {
     top: 0;
     left: 0;
     pointer-events: none;
-  }
+}
   
   .focus-input100::after {
     content: attr(data-symbol);
