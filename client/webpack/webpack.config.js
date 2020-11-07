@@ -94,8 +94,8 @@ const clientConfig = {
     watchContentBase: false,
     proxy: [
       {
-        context: ['/api'],
-        target: 'http://localhost:5010',
+        context: ['/'],
+        target: 'http://0.0.0.0:8080',
         secure: false
       }
     ],
