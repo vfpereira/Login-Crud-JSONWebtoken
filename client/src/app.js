@@ -10,69 +10,100 @@ export default class App extends React.Component {
     super()
 
     this.state = {
-      sign: {
+      register: {
         email: '',
         password: '',
         error: '',
         validation: []
+      },
+      login: {
+        email: '',
+        password: ''
       }
+
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleRegisterSubmit = this.handleRegisterSubmit.bind(this)
+    this.handleLoginSubmit = this.handleLoginSubmit.bind(this)
   }
 
-  handleChange (event) {
+  handleChange (event, type) {
     const targetName = event.target.name
     const targetValue = event.target.value
 
-    this.setState(prevState => ({
-      sign: {
-        ...prevState.sign,
-        [targetName]: targetValue
-      }
-    }))
+    if (type === 'register') {
+      this.setState(prevState => ({
+        register: {
+          ...prevState.register,
+          [targetName]: targetValue
+        }
+      }))
+    }
+
+    if (type === 'login') {
+      this.setState(prevState => ({
+        login: {
+          ...prevState.login,
+          [targetName]: targetValue
+        }
+      }))
+    }
+  }
+
+  handleLogin (event) {
+
+  }
+
+  handleLoginSubmit (event) {
+    event.preventDefault()
+    axios.post('/api/v1.0/login-user', {
+      email: this.state.register.email,
+      password: this.state.register.password
+    })
+      .then(resp => console.log(resp))
+      .catch(err => console.log(err))
   }
 
   handleRegisterSubmit (event) {
     event.preventDefault()
     if (this.validate()) {
       axios.post('/api/v1.0/register-user', {
-        email: this.state.sign.email,
-        password: this.state.sign.password
+        email: this.state.register.email,
+        password: this.state.register.password
       })
         .then(resp => console.log(resp))
         .catch(err => console.log(err))
     }
 
-    console.log('validation', this.state.sign.validation)
+    console.log('validation', this.state.register.validation)
   }
 
   validate (event) {
     let valid = true
 
     this.setState(prevState => ({
-      sign: {
-        ...prevState.sign,
+      register: {
+        ...prevState.register,
         validation: []
       }
     }))
 
-    if (this.state.sign.email === '') {
+    if (this.state.register.email === '') {
       this.setState(prevState => ({
-        sign: {
-          ...prevState.sign,
-          validation: [...prevState.sign.validation.concat(['E-mail is required'])]
+        register: {
+          ...prevState.register,
+          validation: [...prevState.register.validation.concat(['E-mail is required'])]
         }
       }))
       valid = false
     }
 
-    if (this.state.sign.password === '') {
+    if (this.state.register.password === '') {
       this.setState(prevState => ({
-        sign: {
-          ...prevState.sign,
-          validation: [...prevState.sign.validation.concat(['Password is required'])]
+        register: {
+          ...prevState.register,
+          validation: [...prevState.register.validation.concat(['Password is required'])]
         }
       }))
       valid = false
@@ -88,14 +119,15 @@ export default class App extends React.Component {
           exact path='/'
           render={() =>
             <Login
-              sign={this.state.sign}
+              login={this.state.login}
               onHandleChange={this.handleChange}
+              onHandleLoginSubmit={this.handleLoginSubmit}
             />}
         />
         <Route
           path='/register' render={() =>
             <Register
-              sign={this.state.sign}
+              register={this.state.register}
               onHandleChange={this.handleChange}
               onHandleRegisterSubmit={this.handleRegisterSubmit}
             />}

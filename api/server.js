@@ -4,7 +4,7 @@ const { resolve } = require('path')
 const app = require('./app')
 const database = require('./config/db')
 const bodyParser = require('body-parser')
-const User = require('./model/user')
+
 try {
   appExpress.use(bodyParser.urlencoded({ extended: false }))
   appExpress.use(bodyParser.json())

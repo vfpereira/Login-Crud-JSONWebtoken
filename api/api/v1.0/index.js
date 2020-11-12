@@ -26,7 +26,7 @@ router.post('/register-user', function (req, res, next) {
 
   const userModel = userSchema
 
-  userModel.find({ name: user.name }, function (err, docs) {
+  userModel.find({ email: user.email }, function (err, docs) {
     if (err) {
       res.send({ error: true, msg: err })
     }
@@ -37,9 +37,10 @@ router.post('/register-user', function (req, res, next) {
       userModel(user).save().then(() => res.send({ error: false, msg: 'User saved with success' })).catch((e) => console.log(res.send({ error: true, msg: err })))
     }
   })
+})
 
-  console.log(userModel)
-  res.send('Hello v1.0 POST API')
+router.post('/login', function (req, res, next) {
+  res.send('Login')
 })
 
 module.exports = router
