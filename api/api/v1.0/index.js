@@ -3,7 +3,8 @@ const router = express.Router()
 const sha1 = require('sha1')
 const bodyParser = require('body-parser')
 const userSchema = require('../../model/user.js')
-
+const jwt = require('jsonwebtoken')
+require('dotenv-safe').config()
 // parse application/x-www-form-urlencoded
 router.use(bodyParser.urlencoded({ extended: false }))
 
@@ -39,8 +40,23 @@ router.post('/register-user', function (req, res, next) {
   })
 })
 
-router.post('/login', function (req, res, next) {
-  res.send('Login')
+router.post('/login-user', function (req, res, next) {
+  const userModel = userSchema
+  userModel.findOne({ email: req.body.email, password: sha1(req.body.password) }, function (err, user) {
+    if (err) {
+      res.send({ error: true, msg: err })
+    }
+
+    if (!user) {
+      res.send({ error: true, msg: 'User wrong' })
+    } else {
+      const id = user._id
+      const token = jwt.sign({ id }, process.env.SECRET, {
+        expiresIn: 300 // expires in 5min
+      })
+      res.send({ error: false, msg: 'User Logged', token: token })
+    }
+  })
 })
 
 module.exports = router

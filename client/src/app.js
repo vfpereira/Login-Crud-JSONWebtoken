@@ -58,8 +58,8 @@ export default class App extends React.Component {
   handleLoginSubmit (event) {
     event.preventDefault()
     axios.post('/api/v1.0/login-user', {
-      email: this.state.register.email,
-      password: this.state.register.password
+      email: this.state.login.email,
+      password: this.state.login.password
     })
       .then(resp => console.log(resp))
       .catch(err => console.log(err))
