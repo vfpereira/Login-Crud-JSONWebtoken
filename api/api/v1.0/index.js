@@ -59,4 +59,29 @@ router.post('/login-user', function (req, res, next) {
   })
 })
 
+function extractToken (req) {
+  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+    return req.headers.authorization.split(' ')[1]
+  } else if (req.query && req.query.token) {
+    return req.query.token
+  }
+  return null
+}
+
+function verifyJWT (req, res, next) {
+  console.log(req.headers)
+  const token = extractToken(req)
+  if (!token) return res.status(401).json({ auth: false, message: 'No token provided.' })
+
+  jwt.verify(token, process.env.SECRET, function (err, decoded) {
+    if (err) return res.status(500).json({ auth: false, message: 'Failed to authenticate token.' })
+    req.userId = decoded.id
+    next()
+  })
+}
+
+router.post('/authorization', verifyJWT, function (req, res) {
+  res.send({ auth: true })
+})
+
 module.exports = router

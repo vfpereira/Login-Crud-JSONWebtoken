@@ -10,6 +10,8 @@ export default class App extends React.Component {
     super()
 
     this.state = {
+      auth: false,
+      token: '',
       register: {
         email: '',
         password: '',
@@ -26,6 +28,27 @@ export default class App extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleRegisterSubmit = this.handleRegisterSubmit.bind(this)
     this.handleLoginSubmit = this.handleLoginSubmit.bind(this)
+    this.authorization = this.authorization.bind(this)
+  }
+
+  authorization (token) {
+    const config = {
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      }
+    }
+    axios.post('/api/v1.0/authorization', {}, config).then(resp => {
+      this.setState({
+        auth: resp.data.auth
+      })
+    }).catch(err => {
+      console.log(err)
+      this.setState({
+        auth: false
+      })
+    })
   }
 
   handleChange (event, type) {
@@ -51,17 +74,24 @@ export default class App extends React.Component {
     }
   }
 
-  handleLogin (event) {
-
-  }
-
   handleLoginSubmit (event) {
     event.preventDefault()
     axios.post('/api/v1.0/login-user', {
       email: this.state.login.email,
       password: this.state.login.password
     })
-      .then(resp => console.log(resp))
+      .then(resp => {
+        console.log(resp.data.error === true)
+        if (resp.data.error) {
+          console.log('Not valid user or password')
+          return false
+        }
+
+        this.setState({
+          token: resp.data.token
+        })
+        this.authorization(resp.data.token)
+      })
       .catch(err => console.log(err))
   }
 
@@ -115,15 +145,20 @@ export default class App extends React.Component {
   render () {
     return (
       <Router>
-        <Route
-          exact path='/'
-          render={() =>
-            <Login
-              login={this.state.login}
-              onHandleChange={this.handleChange}
-              onHandleLoginSubmit={this.handleLoginSubmit}
-            />}
-        />
+        {this.state.auth ? (
+          <Route exact path='/' render={() => <div>Logged</div>} />
+        )
+          : (
+            <Route
+              exact path='/'
+              render={() =>
+                <Login
+                  login={this.state.login}
+                  onHandleChange={this.handleChange}
+                  onHandleLoginSubmit={this.handleLoginSubmit}
+                />}
+            />
+          )}
         <Route
           path='/register' render={() =>
             <Register
